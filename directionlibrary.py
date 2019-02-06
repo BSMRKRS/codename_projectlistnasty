@@ -2,19 +2,19 @@
 import RoboPiLib as RPL
 import setup
 
-def f():
+def forward():
   RPL.servoWrite(1,1600)
   RPL.servoWrite(0,1400)
 
-def l():
+def left():
   RPL.servoWrite(1,1600)
   RPL.servoWrite(0,1500)
 
-def r():
+def right():
   RPL.servoWrite(1,1500)
   RPL.servoWrite(0,1400)
 
-def b():
+def backward():
   RPL.servoWrite(1,1400)
   RPL.servoWrite(0,1600)
 
