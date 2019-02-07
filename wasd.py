@@ -21,12 +21,16 @@ try:
       break
     elif char == 119:
       dl.forward()
+      char = False
     elif char == 115:
       dl.backward()
+      char = False
     elif char == 97:
       dl.left()
+      char = False
     elif char == 100:
       dl.right()
+      char = False
     else:
       dl.stop()
 finally:
