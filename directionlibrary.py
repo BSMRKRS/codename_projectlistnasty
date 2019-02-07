@@ -8,22 +8,22 @@ def forward(speed):
 
 def left(speed):
   RPL.servoWrite(1,speed[1])
-  RPL.servoWrite(0,speed[0])
+  RPL.servoWrite(0,0)
 
 def right(speed):
-  RPL.servoWrite(1,speed[1])
+  RPL.servoWrite(1,0)
   RPL.servoWrite(0,speed[0])
 
 def backward(speed):
-  RPL.servoWrite(1,speed[1])
-  RPL.servoWrite(0,speed[0])
+  RPL.servoWrite(1,3000 + -1 * speed[1])
+  RPL.servoWrite(0,3000 + -1 * speed[0])
 
 def stop():
   RPL.servoWrite(0,0)
   RPL.servoWrite(1,0)
 
 def slowspeed():
-  return 1490,1510
+  return 1470,1530
 
 def mediumspeed():
   return 1450,1550
