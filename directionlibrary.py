@@ -1,32 +1,16 @@
-#This is functions for speed
 import RoboPiLib as RPL
 import setup
 
-def forward(speed):
-  RPL.servoWrite(1,speed[1])
-  RPL.servoWrite(0,speed[0])
-
-def left(speed):
-  RPL.servoWrite(1,speed[1])
-  RPL.servoWrite(0,0)
-
-def right(speed):
-  RPL.servoWrite(1,0)
-  RPL.servoWrite(0,speed[0])
-
-def backward(speed):
-  RPL.servoWrite(1,3000 + -1 * speed[1])
-  RPL.servoWrite(0,3000 + -1 * speed[0])
-
+def left():
+  RPL.servoWrite(15,800)
+def right():
+  RPL.servoWrite(15,2000)
+def straight():
+  RPL.servoWrite(15,1450)
 def stop():
   RPL.servoWrite(0,0)
   RPL.servoWrite(1,0)
 
-def slowspeed():
-  return 1470,1530
-
-def mediumspeed():
-  return 1450,1550
-
-def highspeed():
-  return 1400,1600
+def stopAll():
+  stop()
+  straight()

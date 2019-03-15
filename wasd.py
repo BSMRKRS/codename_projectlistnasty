@@ -1,50 +1,28 @@
-#Run this 
-
-import time
-import RoboPiLib as RPL
-import setup
-import curses
+import sys,tty,termios,signal
 import directionlibrary as dl
+import RoboPiLib as RPL
 
+fd = sys.stdin.fileno()
+old_settings = termios.tcgetattr(fd)
 
-#These are for keyboard control
-screen = curses.initscr()
-#curses.noecho()
-curses.cbreak()
-screen.keypad(True)
+def interrupted(signum, frame):
+  dl.stopAll()
 
-speed = dl.slowspeed() #setting the speed to be slow
+signal.signal(signal.SIGALRM, interrupted)
+tty.setraw(sys.stdin.fileno())
 
-try:
-  while True:
-    char = screen.getch()
-    if char == 42:
-      dl.stop()
-      break
-    elif char == 119:
-      dl.forward(speed)
-    elif char == 115:
-      dl.backward(speed)
-    elif char == 97:
-      dl.left(speed)
-    elif char == 100:
-      dl.right(speed)
-    elif char == 48:
-      dl.stop()
-      print 'speed set to OFF'
-    elif char == 49:
-      speed = dl.slowspeed()
-      print 'speed set to SLOW'
-    elif char == 50:
-      speed = dl.mediumspeed()
-      print 'speed set to MEDIUM'
-    elif char == 51:
-      speed = dl.highspeed()
-      print 'speed set to HIGH'
-    else:
-      print 'Sorry, that command is not recognized'
-finally:
-  curses.nocbreak()
-  screen.keypad(0)
-  curses.echo()
-  curses.endwin()
+while True:
+  signal.setitimer(signal.ITIMER_REAL,0.255)
+  ch = sys.stdin.read(1)
+  signal.setitimer(signal.ITIMER_REAL,0)
+  if ch == 'q':
+    termios.tcsetattr(fd,termios.TCSADRAIN, old_settings)
+    break
+  elif ch == 'w':
+    RPL.servoWrite(0,20000)
+  elif ch == 's':
+    RPL.servoWrite(1,20000)
+  elif ch == 'a':
+    dl.left()
+  elif ch == 'd':
+    dl.right()
