@@ -1,5 +1,5 @@
 import RoboPiLib as RPL
-import setup
+RPL.RoboPiInit("/dev/ttyAMA0",115200)
 
 def left():
   RPL.servoWrite(15,800)
