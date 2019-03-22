@@ -19,9 +19,11 @@ while True:
     termios.tcsetattr(fd,termios.TCSADRAIN, old_settings)
     break
   elif ch == 'w':
-    RPL.servoWrite(0,20000)
+    RPL.servoWrite(0,1300)
+    #RPL.servoWrite(0,700)
   elif ch == 's':
-    RPL.servoWrite(1,20000)
+    RPL.servoWrite(0,1700)
+    #RPL.servoWrite(0,2200)
   elif ch == 'a':
     dl.left()
   elif ch == 'd':
