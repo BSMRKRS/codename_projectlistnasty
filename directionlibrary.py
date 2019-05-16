@@ -42,7 +42,7 @@ def turn(direction,degree,*optional):
   else:
     print "please specify right or left"
     exit()
-  pause = 0.030306 * degree + 0.256467
+  pause = 0.021111 * degree + 0.0000000001
   time.sleep(pause)
   if optional == ("STOP",):
     STOP()
@@ -62,13 +62,13 @@ def turntowall():
     values()
     if left > 500:
       rightloop = False
-      time.sleep(0.5)
+      time.sleep(0.3)
 
   while leftloop:
     values()
     if right > 550:
       leftloop = False
-      time.sleep(0.5)
+      time.sleep(0.3)
 
 def reverse():
   STOP()
