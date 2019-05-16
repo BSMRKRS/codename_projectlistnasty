@@ -1,2 +1,0 @@
-import directionlibrary
-directionlibrary.stop()
