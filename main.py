@@ -1,13 +1,15 @@
 import directionlibrary as dl
 
+
+#This function runs on startup and cleans up or starts anything you might need
 def initialize():
   dl.STOP()
   #co2 here
 
-def main(*debug):
+def main(*debug): #use main(True) to display sensor readings
   try:
     while True:
-      dl.autonomy()
+      dl.autonomy() #run autonomy functions
       if debug == (True,):
         print(dl.values())
   except KeyboardInterrupt:
