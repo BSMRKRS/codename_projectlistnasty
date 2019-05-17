@@ -14,6 +14,7 @@ def main(*debug):
     wasd()
 
 def wasd():
+  dl.STOP()
   while True:
     userinput = raw_input("Taking keystroke input\n")
     if userinput == "return":

@@ -60,15 +60,14 @@ def turntowall():
     leftloop = False
   while rightloop:
     values()
-    if left > 500:
+    if left > 450:
+      time.sleep(0.5)
       rightloop = False
-      time.sleep(0.3)
-
   while leftloop:
     values()
-    if right > 550:
+    if right > 500:
+      time.sleep(0.5)
       leftloop = False
-      time.sleep(0.3)
 
 def reverse():
   STOP()
@@ -81,23 +80,27 @@ def reverse():
       STOP()
       print "human input required"
       exit()
-    if left < 420:
-      time.sleep(2)
+    elif left < 420:
+      time.sleep(1.0)
       turn("left",90)
       loop = False
     elif right < 420:
-      time.sleep(2)
+      time.sleep(1.0)
       turn("right",90)
       loop = False
+  FORWARD()
+  time.sleep(1)
 
 def autonomy():
   values()
+  #if frontright == 0 or frontleft == 0:
+    #turntowall()
   if frontright == 0 or frontleft == 0:
-    turntowall()
-    #if frontright == 0:
-     # turn("right",45)
-    #elif frontleft == 0:
-     # turn("left",45)
+    if frontright == 0:
+      turn("right",30)
+    elif frontleft == 0:
+      turn("left",30)
+      time.sleep(0.3)
   elif frontmiddle == 1:
     FORWARD()
   elif left < 420  or right < 430:
