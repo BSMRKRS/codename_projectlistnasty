@@ -1,22 +1,26 @@
 import RoboPiLib as RPL
 import setup,time
+def init():
+  print "Initializing co2 sensor"
+  co2readings = []
+  for x in range(0,20):
+    co2readings.append(RPL.analogRead(4))
+    time.sleep(0.05)
+  print "Initialized"
+  return co2readings
 
-print "Initializing co2 sensor"
-readings = []
-for x in range(0,20):
-  readings.append(RPL.analogRead(6))
-  #time.sleep(0.5)
-  time.sleep(0.2)
-print "Initialized"
 
-while True:
-  average = sum(readings) / len(readings)
-  co2 = RPL.analogRead(6)
+def detectHuman():
+  average = sum(co2Readings) / len(co2Readings)
+  co2 = RPL.analogRead(4)
   if average - co2 >= 20:
     print "Human Dectected"
   else:
     pass
-  readings.pop(0)
-  readings.append(co2)
-  print "Average: %s \nCO2: %s \nDifference: %s" % (average,co2,average-co2)
-  time.sleep(0.5)
+  co2Readings.pop(0)
+  co2Readings.append(co2)
+#  print "Average: %s \nCO2: %s \nDifference: %s" % (average,co2,average-co2)
+
+co2Readings = init()
+#while True:
+  #detectHuman()

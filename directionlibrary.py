@@ -9,7 +9,8 @@ def values():
   back = RPL.digitalRead(17)
   frontright = RPL.digitalRead(20)
   left = RPL.analogRead(6)
-  frontmiddle = RPL.digitalRead(19)
+  #frontmiddle = RPL.digitalRead(19)
+  frontmiddle = RPL.analogRead(7)
   frontleft = RPL.digitalRead(18)
   #print(values) to debug readings
   return "front right = %s\nfront middle = %s\nfront left = %s\nright = %s\nleft = %s\nback = %s" % (frontright,frontmiddle,frontleft,right,left,back)
@@ -55,7 +56,7 @@ def turn(direction,degree,*optional):
   else:
     print "please specify right or left"
     exit()
-  pause = 0.021111 * degree + 0.0000000001
+  pause = 0.022 * degree
   time.sleep(pause)
   if optional == ("STOP",):
     STOP()
@@ -119,11 +120,11 @@ def autonomy():
     #turntowall() #This code may or may not be used in Mk. 3
   if frontright == 0 or frontleft == 0: #1
     if frontright == 0:
-      turn("right",20)
-    elif frontleft == 0:
       turn("left",20)
+    elif frontleft == 0:
+      turn("right",20)
       time.sleep(0.3)
-  elif frontmiddle == 1: #2
+  elif frontmiddle <= 250: #2
     FORWARD()
   elif left < 420  or right < 430: #3
     if right < 420:
