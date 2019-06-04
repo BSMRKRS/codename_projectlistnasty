@@ -3,6 +3,7 @@ import directionlibrary as dl
 
 while True:
   print dl.values()
+  #dl.autonomy()
 
 #dl.RIGHT()
 #init = time.time()

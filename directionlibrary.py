@@ -2,52 +2,47 @@ import RoboPiLib as RPL
 import setup, time
 
 def values():
-  global frontright,frontmiddle,frontleft,right,left,back
-  #Digital and analog readings
-  #THESE NEED TO BE UPDATED CONSTANTLY
-  right = RPL.analogRead(5)
-  back = RPL.digitalRead(17)
-  frontright = RPL.digitalRead(20)
-  left = RPL.analogRead(6)
-  #frontmiddle = RPL.digitalRead(19)
-  frontmiddle = RPL.analogRead(7)
-  frontleft = RPL.digitalRead(18)
-  #print(values) to debug readings
-  return "front right = %s\nfront middle = %s\nfront left = %s\nright = %s\nleft = %s\nback = %s" % (frontright,frontmiddle,frontleft,right,left,back)
-
+  global left,right,leftwheel,rightwheel,frontleft,frontright,top
+  left = RPL.analogRead(0)
+  leftwheel = RPL.analogRead(1)
+  frontleft = RPL.analogRead(2)
+  top = RPL.analogRead(3)
+  frontright = RPL.analogRead(4)
+  rightwheel = RPL.analogRead(5)
+  right = RPL.analogRead(6)
+  return "Top: %s\nFront left: %s\nFront right: %s\n\nLeft: %s\nRight: %s\n\nRight wheel: %s\nLeft wheel: %s" % (top,frontleft,frontright,left,right,rightwheel,leftwheel)
 
 ################
 ###Directions###
 ################
 def FORWARD():
-  RPL.servoWrite(0,1590)
-  RPL.servoWrite(1,1410)
-  RPL.servoWrite(2,1590)
-  RPL.servoWrite(3,1410)
+  RPL.servoWrite(8,1410)
+  RPL.servoWrite(9,1590)
+  RPL.servoWrite(10,1410)
+  RPL.servoWrite(11,1590)
 def BACKWARD():
-  RPL.servoWrite(0,1410)
-  RPL.servoWrite(1,1590)
-  RPL.servoWrite(2,1410)
-  RPL.servoWrite(3,1590)
+  RPL.servoWrite(8,1590)
+  RPL.servoWrite(9,1410)
+  RPL.servoWrite(10,1590)
+  RPL.servoWrite(11,1410)
 def RIGHT():
-  RPL.servoWrite(0,1410)
-  RPL.servoWrite(1,1410)
-  RPL.servoWrite(2,1410)
-  RPL.servoWrite(3,1410)
+  RPL.servoWrite(8,1410)
+  RPL.servoWrite(9,1410)
+  RPL.servoWrite(10,1410)
+  RPL.servoWrite(11,1410)
 def LEFT():
-  RPL.servoWrite(0,1590)
-  RPL.servoWrite(1,1590)
-  RPL.servoWrite(2,1590)
-  RPL.servoWrite(3,1590)
+  RPL.servoWrite(8,1590)
+  RPL.servoWrite(9,1590)
+  RPL.servoWrite(10,1590)
+  RPL.servoWrite(11,1590)
 def STOP():
-  for x in range(0,4):
+  for x in range(8,12):
     RPL.servoWrite(x,0)
-#############################
+##########################
 
-#turn the robot a specific degree amount
-#example: turn("left",90)
-#to stop the robot after the turn is complete use:
-#turn("left",90,"STOP")
+###################
+###Turn to angle###
+###################
 def turn(direction,degree,*optional):
   if direction == "right":
     RIGHT()
@@ -60,47 +55,45 @@ def turn(direction,degree,*optional):
   time.sleep(pause)
   if optional == ("STOP",):
     STOP()
+#######################
 
-#This function checks to see if there is any space available to turn
-#If no wall is found, the robot will turn until the analog sensor detects a specific distance
+##################
+###TURN TO WALL###
+##################
+#This code is not being used currently
 def turntowall():
   rightloop = False
   leftloop = False
-  if frontright == 0:
-    RIGHT()
-    rightloop = True
-  elif frontleft == 0:
+  if frontright >= 370:
     LEFT()
+    rightloop = True
+  elif frontleft >= 430:
+    RIGHT()
     leftloop = True
   else:
     rightloop = False
     leftloop = False
   while rightloop:
     values()
-    if left > 450:
+    if right > 450:
       time.sleep(0.5)
       rightloop = False
   while leftloop:
     values()
-    if right > 500:
+    if left > 500:
       time.sleep(0.5)
       leftloop = False
+######################
 
-
-#This function is used for when the robot gets stuck in a box
-#The robot will go backwards until it finds an opening to continue
+#############
+###REVERSE###
+#############
 def reverse():
-  STOP()
-  time.sleep(1)
   BACKWARD()
   loop = True
   while loop:
     values()
-    if back == 0: #If the robot has boxed itself completely in
-      STOP()
-      print "human input required"
-      exit()
-    elif left < 420:
+    if left < 420:
       time.sleep(1.0)
       turn("left",90)
       loop = False
@@ -108,39 +101,23 @@ def reverse():
       time.sleep(1.0)
       turn("right",90)
       loop = False
-  FORWARD()
-  time.sleep(1) #maybe make this shorter, idk
+###################
 
-#####################
-###AUTONOMOUS CODE###
-#####################
+###################
+###MAIN FUNCTION###
+###################
 def autonomy():
-  values()
-  #if frontright == 0 or frontleft == 0:
-    #turntowall() #This code may or may not be used in Mk. 3
-  if frontright == 0 or frontleft == 0: #1
-    if frontright == 0:
-      turn("left",20)
-    elif frontleft == 0:
-      turn("right",20)
-      time.sleep(0.3)
-  elif frontmiddle <= 250: #2
-    FORWARD()
-  elif left < 420  or right < 430: #3
-    if right < 420:
-      turn("right",90)
-    elif left < 420:
-      turn("left",90)
-  else:
-    reverse() #4
-#Progression
-"""
-1: detect side wall(if the robot is going to come up on the wall at an angle)
-  - turn a small distance and slowly the robot will correct itself to being parallel to the wall
-2: detect wall directly infront
-3: detect walls on either side
-  -first check right side, if open, turn right
-  -If right side has a wall, check left, turn left
-4: if walls infront and on sides, go backwards
-  -If the robot has boxed it self in, it will go backwards until it finds an opening
-"""
+    values()
+    if frontright >= 450 or frontleft >= 430:
+        if frontright >= 450:
+            turn("left",10)
+        elif frontleft >= 430:
+            turn("right",10)
+    elif top <= 250:
+        FORWARD()
+    elif left > 400 and right > 450:
+        reverse()
+    elif left > 400:
+        turn("right",45)
+    elif right > 450:
+        turn("left",45)
