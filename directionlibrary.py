@@ -51,7 +51,7 @@ def turn(direction,degree,*optional):
   else:
     print "please specify right or left"
     exit()
-  pause = 0.022 * degree
+  pause = 0.081778 * degree - 0.49
   time.sleep(pause)
   if optional == ("STOP",):
     STOP()
@@ -93,12 +93,12 @@ def reverse():
   loop = True
   while loop:
     values()
-    if left < 420:
-      time.sleep(1.0)
+    if left < 400: #subtract 20 to these
+      time.sleep(2.0)
       turn("left",90)
       loop = False
-    elif right < 420:
-      time.sleep(1.0)
+    elif right < 400:
+      time.sleep(2.0)
       turn("right",90)
       loop = False
 ###################
@@ -108,16 +108,20 @@ def reverse():
 ###################
 def autonomy():
     values()
-    if frontright >= 450 or frontleft >= 430:
-        if frontright >= 450:
-            turn("left",10)
-        elif frontleft >= 430:
-            turn("right",10)
-    elif top <= 250:
-        FORWARD()
-    elif left > 400 and right > 450:
+
+    if top >= 200 and left >= 400 and right >= 450:
         reverse()
+
+    elif frontright >= 470 or frontleft >= 450: #added 20 to these
+        if frontright >= 450 and frontleft <= 400:
+            turn("left",10)
+        elif frontleft >= 430 and frontright <= 430:
+            turn("right",10)
+    elif top <= 200:
+        FORWARD()
     elif left > 400:
         turn("right",45)
     elif right > 450:
         turn("left",45)
+    #else:
+        reverse()#
